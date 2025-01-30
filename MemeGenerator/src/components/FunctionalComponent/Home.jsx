@@ -157,11 +157,10 @@ const Home = () => {
           <option value="" disabled>
             Select Shape
           </option>
-          <option value="rectangle">Rectangle</option>
+          <option value="line">Line</option>
           <option value="circle">Circle</option>
           <option value="square">Square</option>
-          <option value="triangle">Triangle</option>
-          <option value="oval">Oval</option>
+          <option value="oval">Rounded-box</option>
         </select>
         <input
           type="color"
@@ -206,41 +205,45 @@ const Home = () => {
             </div>
           </Rnd>
         ))}
-        {shapes.map((shape) => (
-          <Rnd
-            key={shape.id}
-            id={shape.id}
-            default={{
-              x: shape.x,
-              y: shape.y,
-              width: shape.width,
-              height: shape.height,
-            }}
-            bounds="parent"
-            onClick={() => selectElement("shape", shape.id)}
-            className="workspace-shape"
-            style={{
-              backgroundColor:
-                shape.shapeType === "circle" || shape.shapeType === "square"
-                  ? shape.color
-                  : "transparent",
-              borderRadius:
-                shape.shapeType === "circle" ? "50%" :
-                shape.shapeType === "oval" ? "50% / 25%" :
-                "0",
-              border:
-                shape.shapeType === "triangle"
-                  ? `2px solid ${shape.color}`
-                  : `2px solid ${shape.color}`,
-              width: shape.shapeType === "triangle" ? 0 : shape.width,
-              height: shape.shapeType === "triangle" ? 0 : shape.height,
-              clipPath:
-                shape.shapeType === "triangle"
-                  ? "polygon(50% 0%, 0% 100%, 100% 100%)"
-                  : "none",
-            }}
-          />
-        ))}
+     {shapes.map((shape) => (
+  <Rnd
+    key={shape.id}
+    id={shape.id}
+    default={{
+      x: shape.x,
+      y: shape.y,
+      width: shape.shapeType === "line" ? 100 : shape.width,
+      height: shape.shapeType === "line" ? 2 : shape.height, 
+    }}
+    bounds="parent"
+    enableResizing={
+      shape.shapeType === "line"
+        ? { left: true, right: true, top: false, bottom: false } 
+        : true 
+    }
+    onClick={() => selectElement("shape", shape.id)}
+    className="workspace-shape"
+    style={{
+      backgroundColor: "transparent", 
+      borderRadius:
+        shape.shapeType === "circle" ? "50%" :
+        shape.shapeType === "oval" ? "40% / 70%" : "0", 
+      border:
+        shape.shapeType === "line"
+          ? `2px solid ${shape.color}` 
+          : `2px solid ${shape.color}`, 
+      width: shape.width, 
+      height: shape.shapeType === "line" ? "1px" : shape.height, 
+      clipPath: "none",
+    }}
+    onResizeStop={(e, direction, ref, delta, position) => {
+      if (shape.shapeType === "line") {
+        ref.style.height = "1px"; 
+      }
+    }}
+  />
+))}
+
         {images.length === 0 && texts.length === 0 && shapes.length === 0 && (
           <p style={{ color: "gray", textAlign: "center" }}>
             No elements added yet.
