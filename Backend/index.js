@@ -34,13 +34,7 @@ console.log(user)
   }
   next();
 }
-app.get('/', (req, res) => {
-  res.send("Welcome to Backend friends");
-});
 
-app.get('/static', (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
 app.get('/json',verifyToken,(req,res)=>{
   console.log("inside route")
   res.json({message:"This is middleware",user:req.username})
